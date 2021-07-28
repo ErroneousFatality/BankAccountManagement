@@ -33,6 +33,30 @@ namespace Domain.Common
             {
                 throw new ArgumentException($"Invalid unique master citizen number: control digit is invalid.");
             }
+
+            string politicalRegionOfBirthCodeString = uniqueMasterCitizenNumber[7..8];
+            int politicalRegionOfBirthCode = int.Parse(politicalRegionOfBirthCodeString);
+            if (60 < politicalRegionOfBirthCode || politicalRegionOfBirthCode > 99)
+            {
+                throw new ArgumentOutOfRangeException(nameof(uniqueMasterCitizenNumber), $"Invalid unique master citizen number: Political region of birth is not within Republic of Serbia.");
+            }
+
+            int day = int.Parse(uniqueMasterCitizenNumber[0..1]);
+            int month = int.Parse(uniqueMasterCitizenNumber[2..3]);
+            int year = int.Parse(uniqueMasterCitizenNumber[4..6]);
+            DateTime now = DateTime.Now;
+            int currentMillennium = now.Year / 1000;
+            year += currentMillennium * 1000;
+            DateTime dateOfBirth = new DateTime(year, month, day);
+            if (dateOfBirth > now)
+            {
+                dateOfBirth = dateOfBirth.AddYears(-1000);
+            }
+            DateTime legalAgeBirthday = dateOfBirth.AddYears(18);
+            if (legalAgeBirthday > now)
+            {
+                throw new ArgumentException("Invalid unique master citizen number: Citizen must be an adult.");
+            }
         }
 
         /// <exception cref="ArgumentException">

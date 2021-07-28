@@ -7,12 +7,56 @@ namespace Domain.Entities.Banks
     public class Bank
     {
         // Properties
-        public Guid Id { get; private set; }
+        public BankType Type { get; private set; }
         public string Name { get; private set; }
+        public bool IsEnabled { get; private set; }
         public ICollection<BankAccount> BankAccounts { get; private set; }
 
         // Constructors
-        public Bank(string name)
+
+        /// <exception cref="ArgumentException">
+        ///     Invalid name length.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Invalid type.
+        /// </exception>
+        public Bank(
+            BankType type, 
+            string name,
+            bool isEnabled = true
+        )
+            : this()
+        {
+            if (!Enum.IsDefined(type))
+            {
+                throw new ArgumentOutOfRangeException(nameof(type));
+            }
+            Type = type;
+            Update(name, isEnabled);
+        }
+
+        private Bank() {
+            BankAccounts = new List<BankAccount>();
+        }
+
+        // Methods
+
+        /// <exception cref="ArgumentException">
+        ///     Invalid name length.
+        /// </exception>
+        public void Update(string name, bool isEnabled)
+        {
+            Update(name);
+            if (isEnabled)
+                Enable();
+            else
+                Disable();
+        }
+
+        /// <exception cref="ArgumentException">
+        ///     Invalid name length.
+        /// </exception>
+        public void Update(string name)
         {
             if (string.IsNullOrWhiteSpace(name) || name.Length < NameMinLength || name.Length > NameMinLength)
             {
@@ -20,7 +64,16 @@ namespace Domain.Entities.Banks
             }
             Name = name;
         }
-        private Bank() { }
+
+        public void Enable()
+        {
+            IsEnabled = true;
+        }
+
+        public void Disable()
+        {
+            IsEnabled = false;
+        }
 
         // Constants
         public const int NameMinLength = 1;

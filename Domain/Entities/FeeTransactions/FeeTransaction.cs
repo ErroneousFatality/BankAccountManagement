@@ -17,17 +17,15 @@ namespace Domain.Entities.FeeTransactions
         ///     Amount must be a positive decimal value.
         /// </exception>
         public FeeTransaction(
-            WalletTransferTransaction walletTransferTransaction,
+            Guid userId,
             decimal amount
         )
             : base(
-                  walletTransferTransaction.UserId,
+                  userId,
                   TransactionType.Fee,
                   amount
             )
         {
-            WalletTransferTransaction = walletTransferTransaction;
-            WalletTransferTransactionId = walletTransferTransaction.Id;
         }
 
         private FeeTransaction() { }

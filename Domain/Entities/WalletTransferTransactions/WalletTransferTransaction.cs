@@ -26,7 +26,8 @@ namespace Domain.Entities.WalletTransferTransactions
             Guid userId,
             Guid destinationUserId,
             decimal amount,
-            string reason
+            string reason,
+            FeeTransaction feeTransaction = null
         )
             : base(
                   userId,
@@ -40,6 +41,7 @@ namespace Domain.Entities.WalletTransferTransactions
             }
             DestinationUserId = destinationUserId;
             Reason = reason;
+            FeeTransaction = feeTransaction;
         }
 
         private WalletTransferTransaction() { }
