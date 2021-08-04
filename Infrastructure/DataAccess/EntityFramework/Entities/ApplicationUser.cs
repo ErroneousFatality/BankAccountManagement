@@ -18,12 +18,6 @@ namespace Infrastructure.DataAccess.EntityFramework.Entities
             User = user;
         }
 
-        public ApplicationUser(string username, string email)
-            : base(username)
-        {
-
-        }
-
         private ApplicationUser() { }
 
         // Helper Methods
